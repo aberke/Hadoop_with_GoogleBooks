@@ -46,3 +46,35 @@ def main(argv):
 
 if __name__ == "__main__": 
     main(sys.argv) 
+
+
+
+if year>1970:
+	LongValueSum word count
+
+
+
+
+
+word: count+ 0 minyear
+
+
+1st pass:
+	map bigram to min year appeared
+2nd pass:
+	print bigrams where minyear > 1970
+
+for each outputted bigram:
+	3rd pass:
+		year: count
+
+
+abc	1965
+xyz	1284
+
+abc 44
+xyz 88
+
+abc	1965	44
+xyz	1284	88
+
