@@ -4,7 +4,7 @@ import sys
 match_year = 1953
 
 # input: Google-books bigram data
-def max_bigram_year(argv, match_year):
+def max_bigram_year(argv):
 	for line in sys.stdin:
 		[bigram, year, count, page_count, book_count] = line.split('\t')
 		if year == match_year:
