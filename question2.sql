@@ -4,17 +4,6 @@
 -- 		its frequency in the corpus on the y-axis against time on the x-axis.
 
 -- ##### 111111111111111111111111111111111111	 1st pass): 	111111111111111111111111111111 ###########
-CREATE EXTERNAL TABLE english_unigrams (
- gram string,
- year int,
- total_count bigint,
- page_count bigint,
- book_count bigint
-)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-STORED AS SEQUENCEFILE
-LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/1gram/';
-
 CREATE TABLE question2_firstpass (
  gram string,
  min_year int,
@@ -25,15 +14,22 @@ INSERT OVERWRITE TABLE question2_firstpass
 SELECT
  gram,
  MIN(year),
- SUM(total_count)
+ SUM(occurrences)
 FROM
- english_unigrams
-GROUP BY -- don't need GROUP BY, right?
- gram
+ unigrams
+GROUP BY
+  gram
 DISTRIBUTE BY
- gram;
+  gram;
 
 -- ##### 111111111111111111111111111111111111	 2nd pass):  print out relevant grams	111111111111111111111111111111 ###########
+
+CREATE TABLE question2_secondpass (
+    gram string,
+    total_count bigint
+);
+
+INSERT OVERWRITE TABLE question2_secondpass
 SELECT
  gram, total_count
 FROM
@@ -44,22 +40,23 @@ SORT BY
  total_count DESC
 LIMIT
  20;
-
-
  
 -- ##### 111111111111111111111111111111111111	 3rd pass):  For given gram selected from output of 2nd pass: 111111111111111111111111111111 ###########
+CREATE TABLE question2_graphable (
+    gram string,
+    year int,
+    occurrences bigint
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+STORED AS SEQUENCEFILE
+LOCATION 's3://cs158-aberke-hadoop/output/question2.csv';
+
+INSERT OVERWRITE TABLE question2_graphable
 SELECT
- year as <gram selected>_year,
- total_count as <gram selected>_count
+    gram, year, occurrences
 FROM
- english_unigrams
+    unigrams
 WHERE
- gram == <gram selected>
-SORT BY
- year ASC;
-
-
-
-
-
-
+    gram IN ("autocad", "apoptosis", "comorbidity", "comorbid", "actionscript")
+DISTRIBUTE BY
+    gram;
