@@ -22,9 +22,9 @@ def first_pass(argv):
 	for line in sys.stdin:
 		[unigram, year, count, page_count, book_count] = line.split('\t')
 		if year > 1970:
-			print "LongValueSum:" + unigram + "\t" + book_count
+			print "DoubleValueSum:" + unigram + "\t" + book_count
 		else:
-			print "LongValueSum:" + unigram + "\t" + 0.3
+			print "DoubleValueSum:" + unigram + "\t" + 0.3
 ## 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ##########
 
 
