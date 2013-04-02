@@ -1,6 +1,5 @@
 #!/usr/bin/python
 import sys 
-import re 
 
 
 ################## problem 2: #####################################################################################################
@@ -55,7 +54,7 @@ def third_pass(argv, word): # <-- that syntax probably is not compatible with co
 	for line in sys.stdin:
 		[unigram, year, count, page_count, book_count] = line.split('\t')
 		if unigram == word:
-			print year "\t" + count
+			print year "," + count
 
 	
 # Other Idea: ######################################################################################################
