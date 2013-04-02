@@ -20,7 +20,7 @@ hive> set mapred.min.split.size=134217728;
 -- 	b) What is the trigram that appears at least 10 times with the lowest ratio of book_count to total_count?
 
 
--- ********************** 1.a ###############################
+-- ********************** 3.a ###############################
 -- input: Google-books trigram data
 CREATE EXTERNAL TABLE english_trigrams (
  gram string,
@@ -66,9 +66,9 @@ SORT BY
  ratio ASC
 LIMIT
  5;
--- ********************** 1.a ###############################
+-- ********************** 3.a ###############################
 -- //////////////////////////////////////////////////////////
--- ********************** 1.b ###############################
+-- ********************** 3.b ###############################
 SELECT
  gram,
  book_count / total_count as ratio

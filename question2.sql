@@ -28,12 +28,10 @@ SELECT
  SUM(total_count)
 FROM
  english_unigrams
-WHERE
- gram REGEXP "^[A-Za-z+'-]+$"
+GROUP BY -- don't need GROUP BY, right?
+ gram
 DISTRIBUTE BY
  gram;
--- GROUP BY -- don't need GROUP BY, right?
---  gram;
 
 -- ##### 111111111111111111111111111111111111	 2nd pass):  print out relevant grams	111111111111111111111111111111 ###########
 SELECT
@@ -42,8 +40,6 @@ FROM
  question2_firstpass
 WHERE
  min_year > 1970
-DISTRIBUTE BY
- gram
 SORT BY
  total_count DESC
 LIMIT

@@ -15,16 +15,6 @@ hive> set mapred.min.split.size=134217728;
 
 
 --  ********************** problem 1: ********************************************
-
---  1) (a) What is the most popular bigram of all time?  (b) What is the most popular bigram in year 1987?  How about in year 1953?
--- ********************** 1.a ###############################		
---  (a) --> Answer in two iterations of map-reduce:
--- 	1st iteration: compile count for each bigram in given (or not given) year
--- 	2nd iteration: find bigram with max count
--- **************************************************************************************** 
--- 1ST ITERATION:
--- input: Google-Books bigram data
--- **************************************************************************************** 
 CREATE EXTERNAL TABLE english_bigrams (
  gram string,
  year int,
@@ -36,16 +26,26 @@ ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
 STORED AS SEQUENCEFILE
 LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/2gram/';
 
+--  1) (a) What is the most popular bigram of all time?  (b) What is the most popular bigram in year 1987?  How about in year 1953?
+-- ********************** 1.a ###############################		
+--  (a) --> Answer in two iterations of map-reduce:
+-- 	1st iteration: compile count for each bigram in given (or not given) year
+-- 	2nd iteration: find bigram with max count
+-- **************************************************************************************** 
+-- 1ST ITERATION:
+-- input: Google-Books bigram data
+-- **************************************************************************************** 
 
+INSERT OVERWRITE DIRECTORY "s3://<bucket>/<prefix>"
 SELECT
  gram,
- sum(total_count)
+ sum(total_count) as total
 FROM
  english_bigrams-- <-- do we want a WHERE clause with regex here?
 GROUP BY
  gram
 SORT BY
- total_count DESC
+ total DESC
 LIMIT
  10;
 
