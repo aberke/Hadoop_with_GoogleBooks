@@ -15,7 +15,7 @@ import re
 # input: Google-books trigram data
 def first_pass(argv):
 	for line in sys.stdin:
-		print "LongValueSum:" + '1' +'\t' + '2'
+		print "LongValueSum:" + 'foo\t1\t2'
 		#[trigram, year, count, page_count, book_count] = line.split('\t')
 		#print "LongValueSum:" + trigram + "\t" + page_count +"\t" + count
 
