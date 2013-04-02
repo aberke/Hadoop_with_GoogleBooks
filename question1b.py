@@ -6,8 +6,13 @@ match_year = 1987
 # input: Google-books bigram data
 def max_bigram_year(argv):
 	for line in sys.stdin:
-		[bigram, year, count, page_count, book_count] = line.split('\t')
-		if year == match_year:
+        try:
+    		[bigram, year, count, page_count, book_count] = line.split('\t')
+        except ValueError:
+            print "Error with -- %s" % line
+            raise
+        
+		if year == str(match_year):
 			print "LongValueMax:" + bigram + "\t" + count
 
 
