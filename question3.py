@@ -10,3 +10,13 @@ import re
 
 ########### Alex's 1st Idea: ############################
 # # Need to find aggregator that will take key and sum two separate items
+
+# 1a)
+# input: Google-books trigram data
+def first_pass(argv):
+	for line in sys.stdin:
+		[trigram, year, count, page_count, book_count] = line.split('\t')
+		print "LongValueMax:" + trigram + "\t" + page_count +"\t" + count
+
+
+longvalueSum word, count1, count2
