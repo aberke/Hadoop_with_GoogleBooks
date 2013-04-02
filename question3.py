@@ -15,8 +15,13 @@ import re
 # input: Google-books trigram data
 def first_pass(argv):
 	for line in sys.stdin:
-		[trigram, year, count, page_count, book_count] = line.split('\t')
-		print "LongValueMax:" + trigram + "\t" + page_count +"\t" + count
+		print "LongValueSum:" + '1' +'\t' + '2'
+		#[trigram, year, count, page_count, book_count] = line.split('\t')
+		#print "LongValueSum:" + trigram + "\t" + page_count +"\t" + count
 
 
-longvalueSum word, count1, count2
+def main(argv): 
+    first_pass(argv)
+
+if __name__ == "__main__": 
+    main(sys.argv) 
