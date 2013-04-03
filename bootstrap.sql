@@ -61,3 +61,17 @@ CREATE TABLE trigrams (
 
 INSERT OVERWRITE TABLE trigrams
 SELECT lower(gram) AS g, occurrences, pages, books FROM trigrams_raw WHERE gram REGEXP "^[A-Za-z+'-]+ [A-Za-z+'-]+ [A-Za-z+'-]+$" DISTRIBUTE BY g;
+
+###############################
+# UNIGRAMS TEARDOWN (to save state)
+CREATE TABLE unigrams_saved (
+    gram string,
+    year int,
+    occurrences bigint
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+STORED AS SEQUENCEFILE
+LOCATION 's3://cs158-aberke-hadoop/saved/1gram/';
+
+INSERT OVERWRITE TABLE unigrams_saved
+SELECT * FROM unigrams;
