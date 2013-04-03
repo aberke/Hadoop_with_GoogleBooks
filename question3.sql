@@ -59,10 +59,6 @@ FROM
  question3_firstpass
 WHERE
  total_count >= 10
-GROUP BY
- gram
-DISTRIBUTE BY
- gram
 SORT BY
  ratio ASC
 LIMIT
