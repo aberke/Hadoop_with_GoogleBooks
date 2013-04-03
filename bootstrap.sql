@@ -60,4 +60,4 @@ CREATE TABLE trigrams (
 );
 
 INSERT OVERWRITE TABLE trigrams
-SELECT lower(gram), occurrences, pages, books FROM trigrams_raw WHERE gram REGEXP "^[A-Za-z+'-]+ [A-Za-z+'-]+ [A-Za-z+'-]+$";
+SELECT lower(gram) AS g, occurrences, pages, books FROM trigrams_raw WHERE gram REGEXP "^[A-Za-z+'-]+ [A-Za-z+'-]+ [A-Za-z+'-]+$" DISTRIBUTE BY g;

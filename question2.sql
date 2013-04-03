@@ -48,15 +48,18 @@ CREATE TABLE question2_graphable (
     occurrences bigint
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-STORED AS SEQUENCEFILE
-LOCATION 's3://cs158-aberke-hadoop/output/question2.csv';
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 's3://cs158-aberke-hadoop/output/question2/';
 
 INSERT OVERWRITE TABLE question2_graphable
 SELECT
-    gram, year, occurrences
+    gram, year, sum(occurrences)
 FROM
     unigrams
 WHERE
     gram IN ("autocad", "apoptosis", "comorbidity", "comorbid", "actionscript")
+GROUP BY
+    year, gram
 DISTRIBUTE BY
     gram;
