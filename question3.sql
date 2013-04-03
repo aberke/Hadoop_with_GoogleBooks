@@ -5,18 +5,6 @@
 
 
 -- ********************** 3.a ###############################
-CREATE EXTERNAL TABLE english_trigrams (
- gram string,
- year int,
- total_count bigint,
- page_count bigint,
- book_count bigint
-)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-STORED AS SEQUENCEFILE
-LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/3gram/';
-
-
 CREATE TABLE question3_firstpass (
  gram string,
  page_count bigint,
@@ -27,17 +15,22 @@ CREATE TABLE question3_firstpass (
 INSERT OVERWRITE TABLE question3_firstpass
 SELECT
  gram,
- SUM(page_count),
- SUM(book_count),
- SUM(occurances)
+ SUM(pages),
+ SUM(books),
+ SUM(occurrences)
 FROM
  trigrams
+GROUP BY
+ gram
 DISTRIBUTE BY
  gram;
-GROUP BY 
- gram;
 
+CREATE TABLE question3_pageratio (
+    gram string,
+    ratio double
+);
 
+INSERT OVERWRITE TABLE question3_pageratio
 SELECT
  gram,
  page_count / total_count as ratio
@@ -52,6 +45,13 @@ LIMIT
 -- ********************** 3.a ###############################
 -- //////////////////////////////////////////////////////////
 -- ********************** 3.b ###############################
+
+CREATE TABLE question3_bookratio (
+    gram string,
+    ratio double
+);
+
+INSERT OVERWRITE TABLE question3_bookratio
 SELECT
  gram,
  book_count / total_count as ratio
@@ -67,3 +67,4 @@ SORT BY
  ratio ASC
 LIMIT
  5;
+ 
