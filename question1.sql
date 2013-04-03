@@ -41,7 +41,7 @@ SELECT
  gram,
  sum(total_count) as total
 FROM
- english_bigrams-- <-- do we want a WHERE clause with regex here?
+ bigrams
 GROUP BY
  gram
 SORT BY

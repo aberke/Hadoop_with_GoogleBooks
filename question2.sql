@@ -53,7 +53,7 @@ LOCATION 's3://cs158-aberke-hadoop/output/question2.csv';
 
 INSERT OVERWRITE TABLE question2_graphable
 SELECT
-    gram, year, occurrences
+    gram, year, SUM(occurrences)
 FROM
     unigrams
 WHERE
