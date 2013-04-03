@@ -75,3 +75,16 @@ LOCATION 's3://cs158-aberke-hadoop/saved/1gram/';
 
 INSERT OVERWRITE TABLE unigrams_saved
 SELECT * FROM unigrams;
+
+# BIGRAMS TEARDOWN
+CREATE TABLE bigrams_saved (
+    gram string,
+    year int,
+    occurrences bigint
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+STORED AS SEQUENCEFILE
+LOCATION 's3://cs158-aberke-hadoop/saved/2gram/';
+
+INSERT OVERWRITE TABLE bigrams_saved
+SELECT * FROM bigrams;

@@ -29,11 +29,7 @@ hive> set mapred.min.split.size=134217728;
 CREATE TABLE question1a_results (
     gram string,
     occurrences bigint
-)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-STORED AS TEXTFILE
-LOCATION 's3://cs158-aberke-hadoop/output/question1a/';
+);
 
 INSERT OVERWRITE TABLE question1a_results
 SELECT
@@ -43,10 +39,10 @@ FROM
  bigrams
 GROUP BY
  gram
-SORT BY
- total DESC
 DISTRIBUTE BY
  gram
+SORT BY
+ total DESC
 LIMIT
  10;
 
@@ -57,11 +53,7 @@ LIMIT
 CREATE TABLE question1b_results (
     gram string,
     occurrences bigint
-)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-STORED AS TEXTFILE
-LOCATION 's3://cs158-aberke-hadoop/output/question1b/';
+);
 
 INSERT OVERWRITE TABLE question1b_results
 SELECT
@@ -73,10 +65,10 @@ WHERE
  year = 1987
 GROUP BY
  gram
-SORT BY
- total DESC
 DISTRIBUTE BY
  gram
+SORT BY
+ total DESC
 LIMIT
  10;
  
@@ -86,11 +78,7 @@ LIMIT
 CREATE TABLE question1c_results (
     gram string,
     occurrences bigint
-)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-STORED AS TEXTFILE
-LOCATION 's3://cs158-aberke-hadoop/output/question1c/';
+);
 
 INSERT OVERWRITE TABLE question1c_results
 SELECT
@@ -102,10 +90,10 @@ WHERE
  year = 1953
 GROUP BY
  gram
-SORT BY
- total DESC
 DISTRIBUTE BY
  gram
+SORT BY
+ total DESC
 LIMIT
  10;
 
