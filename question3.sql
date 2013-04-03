@@ -5,19 +5,6 @@
 
 
 -- ********************** 3.a ###############################
--- input: Google-books trigram data
-CREATE EXTERNAL TABLE english_trigrams (
- gram string,
- year int,
- total_count bigint,
- page_count bigint,
- book_count bigint
-)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-STORED AS SEQUENCEFILE
-LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/3gram/';
-
-
 CREATE TABLE question3_firstpass (
  gram string,
  page_count bigint,
