@@ -15,16 +15,6 @@ hive> set mapred.min.split.size=134217728;
 
 
 --  ********************** problem 1: ********************************************
-CREATE EXTERNAL TABLE english_bigrams (
- gram string,
- year int,
- total_count bigint,
- page_count bigint,
- book_count bigint
-)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-STORED AS SEQUENCEFILE
-LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/2gram/';
 
 --  1) (a) What is the most popular bigram of all time?  (b) What is the most popular bigram in year 1987?  How about in year 1953?
 -- ********************** 1.a ###############################		
@@ -36,16 +26,27 @@ LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/2gram/';
 -- input: Google-Books bigram data
 -- **************************************************************************************** 
 
-INSERT OVERWRITE DIRECTORY "s3://<bucket>/<prefix>"
+CREATE TABLE question1a_results (
+    gram string,
+    occurrences bigint
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 's3://cs158-aberke-hadoop/output/question1a/';
+
+INSERT OVERWRITE TABLE question1a_results
 SELECT
  gram,
- sum(total_count) as total
+ sum(occurrences) as total
 FROM
  bigrams
 GROUP BY
  gram
 SORT BY
  total DESC
+DISTRIBUTE BY
+ gram
 LIMIT
  10;
 
@@ -53,56 +54,60 @@ LIMIT
 -- ********************** 1.a ###############################
 -- //////////////////////////////////////////////////////////
 -- ********************** 1.b ###############################
-CREATE EXTERNAL TABLE english_bigrams (
- gram string,
- year int,
- total_count bigint,
- page_count bigint,
- book_count bigint
+CREATE TABLE question1b_results (
+    gram string,
+    occurrences bigint
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-STORED AS SEQUENCEFILE
-LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/2gram/';
--- Now extract out data we want and order it by count so we get the top one!
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 's3://cs158-aberke-hadoop/output/question1b/';
+
+INSERT OVERWRITE TABLE question1b_results
 SELECT
  gram,
- total_count
+ sum(occurrences) as total
 FROM
- english_bigrams
-WHERE-- <-- do we want a WHERE clause with regex here?
+ bigrams
+WHERE
  year = 1987
-DISTRIBUTE BY -- <-- do we want this?? We want to filter out all the other decades anyhow, this might reduce the time of our job flow
- year
+GROUP BY
+ gram
 SORT BY
- total_count DESC
+ total DESC
+DISTRIBUTE BY
+ gram
 LIMIT
  10;
+ 
 -- ********************** 1.b ###############################
 -- //////////////////////////////////////////////////////////
 -- ********************** 1.c ###############################
-CREATE EXTERNAL TABLE english_bigrams (
- gram string,
- year int,
- total_count bigint,
- page_count bigint,
- book_count bigint
+CREATE TABLE question1c_results (
+    gram string,
+    occurrences bigint
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-STORED AS SEQUENCEFILE
-LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-all/2gram/';
--- Now extract out data we want and order it by count so we get the top one!
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 's3://cs158-aberke-hadoop/output/question1c/';
+
+INSERT OVERWRITE TABLE question1c_results
 SELECT
  gram,
- total_count
+ sum(occurrences) as total
 FROM
- english_bigrams
-WHERE-- <-- do we want a WHERE clause with regex here?
+ bigrams
+WHERE
  year = 1953
-DISTRIBUTE BY -- <-- do we want this?? We want to filter out all the other decades anyhow, this might reduce the time of our job flow
- year
+GROUP BY
+ gram
 SORT BY
- total_count DESC
+ total DESC
+DISTRIBUTE BY
+ gram
 LIMIT
  10;
+
 
 
